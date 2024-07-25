@@ -1,62 +1,97 @@
-import * as React from "react";
-import { tokens, makeStyles } from "@fluentui/react-components";
+import { DefaultButton } from "@fluentui/react";
+import React from "react";
 
+/**
+ * Interface for an item in the HeroList component.
+ */
 export interface HeroListItem {
-  icon: React.JSX.Element;
+  id: string;
   primaryText: string;
+  type: string;
+  name: string;
 }
 
+/**
+ * Props for the HeroList component.
+ */
 export interface HeroListProps {
   message: string;
   items: HeroListItem[];
+  children: any;
 }
 
-const useStyles = makeStyles({
-  list: {
-    marginTop: "20px",
-  },
-  listItem: {
-    paddingBottom: "20px",
-    display: "flex",
-  },
-  icon: {
-    marginRight: "10px",
-  },
-  itemText: {
-    fontSize: tokens.fontSizeBase300,
-    fontColor: tokens.colorNeutralBackgroundStatic,
-  },
-  welcome__main: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  message: {
-    fontSize: tokens.fontSizeBase500,
-    fontColor: tokens.colorNeutralBackgroundStatic,
-    fontWeight: tokens.fontWeightRegular,
-    paddingLeft: "10px",
-    paddingRight: "10px",
-  },
-});
+/**
+ * A component that displays a list of hero items.
+ */
+export default class HeroList extends React.Component<HeroListProps> {
+  /**
+   * Renders the component.
+   * @returns The rendered component.
+   */
+  render() {
+    const { children, items, message } = this.props;
+    const infoItems = items.filter((item) => item.type === "information");
+    const clauseItems = items.filter((item) => item.type === "clause");
+    const commentItems = items.filter((item) => item.type === "comment");
+    const clauseListItems = clauseItems.map((item, index) => (
+      <li className="ms-ListItem" key={index}>
+        <DefaultButton text={item.name} onClick={() => this.paraClick(item.type, item.primaryText)} />
+      </li>
+    ));
+    const commentListItems = commentItems.map((item, index) => (
+      <li className="ms-ListItem" key={index}>
+        <DefaultButton text={item.name} onClick={() => this.paraClick(item.type, item.primaryText)} />
+      </li>
+    ));
+    const infoListItems = infoItems.map((item, index) => (
+      <li className="ms-ListItem" key={index}>
+        <DefaultButton text={item.name} onClick={() => this.paraClick(item.type, item.primaryText)} />
+      </li>
+    ));
 
-const HeroList: React.FC<HeroListProps> = (props: HeroListProps) => {
-  const { items, message } = props;
-  const styles = useStyles();
+    console.log(clauseListItems);
+    console.log(commentListItems);
+    console.log(infoListItems);
 
-  const listItems = items.map((item, index) => (
-    <li className={styles.listItem} key={index}>
-      <i className={styles.icon}>{item.icon}</i>
-      <span className={styles.itemText}>{item.primaryText}</span>
-    </li>
-  ));
-  return (
-    <div className={styles.welcome__main}>
-      <h2 className={styles.message}>{message}</h2>
-      <ul className={styles.list}>{listItems}</ul>
-    </div>
-  );
-};
+    return (
+      <main className="ms-welcome__main">
+        <h2 className="ms-font-xl ms-fontWeight-semilight ms-fontColor-neutralPrimary ms-u-slideUpIn20">{message}</h2>
+        <h2 className="ms-font-l ms-fontWeight-semibold ms-fontColor-neutralPrimary ms-u-slideUpIn20">
+          Information Items
+        </h2>
+        <ul className="ms-List ms-welcome__features ms-u-slideUpIn10">{infoListItems}</ul>
+        <h2 className="ms-font-l ms-fontWeight-semibold ms-fontColor-neutralPrimary ms-u-slideUpIn20">Clause Items</h2>
+        <ul className="ms-List ms-welcome__features ms-u-slideUpIn10">{clauseListItems}</ul>
+        <h2 className="ms-font-l ms-fontWeight-semibold ms-fontColor-neutralPrimary ms-u-slideUpIn20">Comment Items</h2>
+        <ul className="ms-List ms-welcome__features ms-u-slideUpIn10">{commentListItems}</ul>
+        {children}
+      </main>
+    );
+  }
 
-export default HeroList;
+  /**
+   * Handles the click event for a list item.
+   * @param type - The type of item clicked.
+   * @param pText - The primary text of the item clicked.
+   * @returns A promise that resolves when the operation is complete.
+   */
+  paraClick = async (type, pText) => {
+    return Word.run(async (context) => {
+      /**
+       * Insert your Word code here
+       */
+
+      // insert a paragraph at the end of the document.
+      if (type === "clause" || type === "information") {
+        context.document.getSelection().insertParagraph(pText, Word.InsertLocation.after);
+      } else if (type === "comment") {
+        context.document.getSelection().insertComment(pText);
+      }
+
+      // change the paragraph color to blue.
+      //paragraph.font.color = "blue";
+
+      await context.sync();
+    });
+  };
+}
