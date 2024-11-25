@@ -1,6 +1,6 @@
 {
   "name": "office-addin-taskpane-react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/OfficeDev/Office-Addin-TaskPane-React.git"
@@ -33,6 +33,7 @@
     "@fluentui/react-icons": "^2.0.232",
     "core-js": "^3.36.0",
     "es6-promise": "^4.2.8",
+    "node": "^22.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.3.1",
     "regenerator-runtime": "^0.14.1"
