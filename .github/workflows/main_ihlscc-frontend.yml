@@ -67,3 +67,4 @@ jobs:
           app-name: 'IHLSCC-Frontend'
           slot-name: 'Production'
           package: 'release.zip' # Point to the zip file directly
+          
