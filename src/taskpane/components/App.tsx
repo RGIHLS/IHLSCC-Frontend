@@ -64,6 +64,7 @@ export default class App extends React.Component<AppProps, AppState> {
       case "solon":
       case "saffrey":
       case "arcus":
+      case "thisIsTestRG":  
       case "any":
         this.onClick(selectedValue);
         break;
@@ -95,6 +96,7 @@ export default class App extends React.Component<AppProps, AppState> {
 
           <select onChange={this.handleDropdownChange}>
             <option value="uss">USS</option>
+            <option value="thisIsTestRG">thisIsTestRG</option>
             <option value="cppib">CPPIB</option>
             <option value="ifm">IFM</option>
             <option value="mvCredit">MV CREDIT</option>
